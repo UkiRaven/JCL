@@ -5,7 +5,8 @@ package com.company.commands;
  */
 public class PwdCommand implements Command {
     @Override
-    public void execute(String ...args) {
+    public boolean execute(String ...args) {
         System.out.println(System.getProperty("user.dir"));
+        return true;
     }
 }

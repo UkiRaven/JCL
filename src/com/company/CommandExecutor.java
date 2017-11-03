@@ -3,6 +3,7 @@ package com.company;
 import com.company.commands.*;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,42 +18,30 @@ public class CommandExecutor {
         commandMap.put(CommandList.CD, new CDCommand());
     }
 
-    public static void execute(String commandName, String ...args) throws NoSuchCommandException {
+    public static boolean execute(String commandName, String ...args) throws NoSuchCommandException {
         try {
-            commandMap.get(CommandList.valueOf(commandName)).execute(args);
+            return commandMap.get(CommandList.valueOf(commandName)).execute(args);
         } catch (IllegalArgumentException e) {
             throw new NoSuchCommandException();
+
         }
     }
 
-    public static void executeProcess(String ...command) {
+    public static boolean executeProcess(String ...command) {
+        ProcessBuilder builder = new ProcessBuilder(command);
+        builder.directory(Paths.get(System.getProperty("user.dir")).toFile());
+        builder.inheritIO();
         try {
-            ProcessBuilder builder = new ProcessBuilder(command);
-            builder.inheritIO();
-            builder.start();
+            builder.start().waitFor();
+        } catch (InterruptedException e) {
+            System.out.println("process " + command[0] + " was interrupted");
+            return false;
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
-
+        return true;
     }
-//
-//    static class OutWriter extends Thread {
-//        OutputStream out;
-//        OutWriter(OutputStream out) {
-//            this.out = out;
-//        }
-//
-//        @Override
-//        public void run() {
-//            try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
-//                for (int i = 0; i < 10; i++) {
-//                    writer.write("sup\n");
-//                    writer.flush();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+
+
 
 }

@@ -9,12 +9,13 @@ import java.nio.file.Paths;
  */
 public class DirCommand implements Command {
     @Override
-    public void execute(String ...args) {
+    public boolean execute(String ...args) {
         try {
             Files.list(Paths.get(System.getProperty("user.dir")))
                     .forEach(p -> System.out.println(p.getName(p.getNameCount() - 1)));
+            return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
     }
 }

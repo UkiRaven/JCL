@@ -11,21 +11,21 @@ import java.nio.file.Paths;
 public class CDCommand implements Command{
 
     @Override
-    public void execute(String... args) {
+    public boolean execute(String... args)  {
         Path path = Paths.get(args[0]).normalize();
         if (path.isAbsolute()) {
             System.setProperty("user.dir", path.toString());
-            return;
+            return true;
         }
         try {
             Path newPath = Paths.get(System.getProperty("user.dir"), path.toString());
             System.setProperty("user.dir", newPath.toRealPath().toString());
-
         } catch (NoSuchFileException e) {
             System.out.println("No such file");
+            return false;
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
-
+        return true;
     }
 }
