@@ -11,7 +11,8 @@ public class DirCommand implements Command {
     @Override
     public void execute(String ...args) {
         try {
-            Files.list(Paths.get(System.getProperty("user.dir"))).forEach(System.out::println);
+            Files.list(Paths.get(System.getProperty("user.dir")))
+                    .forEach(p -> System.out.println(p.getName(p.getNameCount() - 1)));
         } catch (IOException e) {
             e.printStackTrace();
         }

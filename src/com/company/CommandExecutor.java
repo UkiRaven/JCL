@@ -25,9 +25,9 @@ public class CommandExecutor {
         }
     }
 
-    public static void executeProcess(String processName, String ...args) {
+    public static void executeProcess(String ...command) {
         try {
-            ProcessBuilder builder = new ProcessBuilder(processName);
+            ProcessBuilder builder = new ProcessBuilder(command);
             builder.inheritIO();
             builder.start();
         } catch (IOException e) {
@@ -35,24 +35,24 @@ public class CommandExecutor {
         }
 
     }
-
-    static class OutWriter extends Thread {
-        OutputStream out;
-        OutWriter(OutputStream out) {
-            this.out = out;
-        }
-
-        @Override
-        public void run() {
-            try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
-                for (int i = 0; i < 10; i++) {
-                    writer.write("sup\n");
-                    writer.flush();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//
+//    static class OutWriter extends Thread {
+//        OutputStream out;
+//        OutWriter(OutputStream out) {
+//            this.out = out;
+//        }
+//
+//        @Override
+//        public void run() {
+//            try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
+//                for (int i = 0; i < 10; i++) {
+//                    writer.write("sup\n");
+//                    writer.flush();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
 }

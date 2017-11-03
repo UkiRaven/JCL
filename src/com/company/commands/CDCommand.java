@@ -1,6 +1,7 @@
 package com.company.commands;
 
-import java.nio.file.Files;
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -11,12 +12,19 @@ public class CDCommand implements Command{
 
     @Override
     public void execute(String... args) {
-        String userdir = System.getProperty("user.dir");
-        Path newPath = Paths.get(userdir, args[0]);
-        if (Files.exists(newPath) && Files.isDirectory(newPath)) {
-            System.setProperty("user.dir", newPath.toString());
-        } else {
-            System.out.println("Wrong path");
+        Path path = Paths.get(args[0]).normalize();
+        if (path.isAbsolute()) {
+            System.setProperty("user.dir", path.toString());
+            return;
+        }
+        try {
+            Path newPath = Paths.get(System.getProperty("user.dir"), path.toString());
+            System.setProperty("user.dir", newPath.toRealPath().toString());
+
+        } catch (NoSuchFileException e) {
+            System.out.println("No such file");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

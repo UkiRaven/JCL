@@ -21,8 +21,8 @@ public class Main {
                         CommandExecutor.executeProcess(args[1]);
                     } else if (args.length > 2) {
                         String[] varargs = new String[args.length - 1];
-                        System.arraycopy(args, 2, varargs, 0, args.length - 1);
-                        CommandExecutor.executeProcess(args[1], varargs);
+                        System.arraycopy(args, 1, varargs, 0, args.length - 1);
+                        CommandExecutor.executeProcess(varargs);
                     }
                 } else {
                     if (args.length == 1) {
